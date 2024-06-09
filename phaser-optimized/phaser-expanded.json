@@ -1,0 +1,28 @@
+{
+    "textures": [{% for texture in allResults.0.textures %}
+      {
+          "image":"{{texture.fullName}}",{% if texture.normalMapFileName %}
+          "{{texture.normalMapFileName}}":"{{texture.normalMapFileName}}",{% endif %}
+          "format":"{{settings.outputFormat}}",
+          "size":{"w":{{texture.size.width}},"h":{{texture.size.height}}},
+          "scale":{{variantParams.scale}},
+          "frames":[{% for sprite in texture.allSprites %}
+              {
+                  "filename":"{% if settings.trimSpriteNames %}{{sprite.trimmedName}}{% else %}{{sprite.fullName}}{% endif %}",
+                  "rotated":{{sprite.rotated}},
+                  "trimmed":{{sprite.trimmed}},
+                  "sourceSize": { "w":{{sprite.untrimmedSize.width}}, "h":{{sprite.untrimmedSize.height}} },
+                  "spriteSourceSize": { "x":{{sprite.sourceRect.x}}, "y":{{sprite.sourceRect.y}}, "w":{{sprite.sourceRect.width}}, "h":{{sprite.sourceRect.height}} },
+                  "frame":{% if sprite.rotated %}{ "x":{{sprite.frameRect.x}}, "y":{{sprite.frameRect.y}}, "w":{{sprite.frameRect.height}}, "h":{{sprite.frameRect.width}}}{% else %}{ "x":{{sprite.frameRect.x}}, "y":{{sprite.frameRect.y}}, "w":{{sprite.frameRect.width}}, "h":{{sprite.frameRect.height}}}{% endif %}{% if sprite.pivotPointNorm and settings.writePivotPoints %},
+                  "anchor":{ "x":{{sprite.pivotPointNorm.x}}, "y":{{sprite.pivotPointNorm.y}}}{% endif %}
+              }{% if not forloop.last %},{% endif %}{% endfor %}
+          ]
+      }{% if not forloop.last %},{% endif %}{% endfor %}
+      ],
+    "meta": {
+      "app": "https://www.codeandweb.com/texturepacker",
+      "smartupdate": "{{smartUpdateKey}}",
+      "version": "3.0"
+    }
+  }
+  
